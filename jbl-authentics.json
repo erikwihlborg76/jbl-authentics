@@ -1,0 +1,677 @@
+[
+    {
+        "id": "d667aaabed8b1fc2",
+        "type": "tab",
+        "label": "JBL Authentics",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1e0b44860d464a0b",
+        "type": "http in",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "url": "jbl/*",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "708340c1330db5e7",
+                "7608d3145a3a3dbf"
+            ]
+        ]
+    },
+    {
+        "id": "6fe40927ed1fcdde",
+        "type": "tcp request",
+        "z": "d667aaabed8b1fc2",
+        "server": "",
+        "port": "10025",
+        "out": "immed",
+        "ret": "buffer",
+        "splitc": " ",
+        "name": "",
+        "x": 1060,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e4cf165f242e204c",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "volime-up",
+        "func": "// var payload = msg.payload;\n\nvar body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>volume-up</name>\\\n<zone>Main Zone</zone>\\\n<para></para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 160,
+        "wires": [
+            [
+                "e284e417445d1ae0"
+            ]
+        ]
+    },
+    {
+        "id": "708340c1330db5e7",
+        "type": "switch",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "property": "req.url",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "/jbl/volume/up",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/volume/down",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/volume/current",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/source/optical",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/source/dlna",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/source/current",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/power/on",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/power/off",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/power/current",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "/jbl/heartbeat",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 10,
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "e4cf165f242e204c"
+            ],
+            [
+                "2c867ad422376a1c"
+            ],
+            [
+                "a61854f4bc32f858"
+            ],
+            [
+                "c07bcb08b1549d82"
+            ],
+            [
+                "89fc5ebafc92bada"
+            ],
+            [
+                "549af7d549693324"
+            ],
+            [
+                "71a9dc084fe2661d"
+            ],
+            [
+                "8c34dae68727e69b"
+            ],
+            [
+                "ac752369fd2cbc5f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4fe885ec4aea0826",
+        "type": "inject",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "props": [],
+        "repeat": "18000",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 60,
+        "wires": [
+            [
+                "295dde76831e6f57"
+            ]
+        ]
+    },
+    {
+        "id": "59e9d402f8cb8399",
+        "type": "change",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "jbl_ip",
+                "pt": "flow",
+                "to": "payload.answer[0]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2c867ad422376a1c",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "volime-down",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>volume-down</name>\\\n<zone>Main Zone</zone>\\\n<para></para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "e284e417445d1ae0"
+            ]
+        ]
+    },
+    {
+        "id": "c07bcb08b1549d82",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "source optical",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>source-selection</name>\\\n<zone>Main Zone</zone>\\\n<para>OPTICAL1</para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 340,
+        "wires": [
+            [
+                "e284e417445d1ae0"
+            ]
+        ]
+    },
+    {
+        "id": "549af7d549693324",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "source current",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>query-status</name>\\\n<zone>Main Zone</zone>\\\n<para>source</para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 420,
+        "wires": [
+            [
+                "c4f901b516322dfb"
+            ]
+        ]
+    },
+    {
+        "id": "89fc5ebafc92bada",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "source dlna (incl. Spotify)",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>source-selection</name>\\\n<zone>Main Zone</zone>\\\n<para>Dlna</para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 380,
+        "wires": [
+            [
+                "e284e417445d1ae0"
+            ]
+        ]
+    },
+    {
+        "id": "e284e417445d1ae0",
+        "type": "change",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "jbl_ip",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 890,
+        "y": 240,
+        "wires": [
+            [
+                "a47a01a6a3387b6d",
+                "6fe40927ed1fcdde"
+            ]
+        ]
+    },
+    {
+        "id": "e7aaaa780dff0474",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "source airplay",
+        "func": "var payload = msg.payload;\n\nvar body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>source-selection</name>\\\n<zone>Main Zone</zone>\\\n<para>SOURCE_AIRPLAY</para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nreturn { payload: text};\n  ",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c4f901b516322dfb",
+        "type": "change",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "jbl_ip",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 870,
+        "y": 560,
+        "wires": [
+            [
+                "b5bf1bdfe8647afe",
+                "a518834ab8f6d30f"
+            ]
+        ]
+    },
+    {
+        "id": "b5bf1bdfe8647afe",
+        "type": "tcp request",
+        "z": "d667aaabed8b1fc2",
+        "server": "",
+        "port": "10025",
+        "out": "time",
+        "ret": "buffer",
+        "splitc": "50",
+        "name": "",
+        "x": 1040,
+        "y": 520,
+        "wires": [
+            [
+                "d93676355fde660d"
+            ]
+        ]
+    },
+    {
+        "id": "b7df8a7aee13d3d0",
+        "type": "http response",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1350,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "361e233f93b1e51c",
+        "type": "debug",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1350,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "a518834ab8f6d30f",
+        "type": "debug",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "d93676355fde660d",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "func": "msg.payload = msg.payload.toString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 440,
+        "wires": [
+            [
+                "b7df8a7aee13d3d0",
+                "361e233f93b1e51c"
+            ]
+        ]
+    },
+    {
+        "id": "7353f7ff4eeb715a",
+        "type": "debug",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "8c34dae68727e69b",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "power off",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<status>\\\n<name>power</name>\\\n<zone></zone>\\\n<para>off</para>\\\n</status>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 560,
+        "wires": [
+            [
+                "c4f901b516322dfb"
+            ]
+        ]
+    },
+    {
+        "id": "71a9dc084fe2661d",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "power on",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<status>\\\n<name>power</name>\\\n<zone></zone>\\\n<para>on</para>\\\n</status>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 520,
+        "wires": [
+            [
+                "e284e417445d1ae0"
+            ]
+        ]
+    },
+    {
+        "id": "a61854f4bc32f858",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "volume current",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>query-status</name>\\\n<zone>Main Zone</zone>\\\n<para>volume</para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 260,
+        "wires": [
+            [
+                "c4f901b516322dfb"
+            ]
+        ]
+    },
+    {
+        "id": "ac752369fd2cbc5f",
+        "type": "function",
+        "z": "d667aaabed8b1fc2",
+        "name": "power current",
+        "func": "var body = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\\n<harman>\\\n<mm>\\\n<common>\\\n<control>\\\n<name>query-status</name>\\\n<zone>Main Zone</zone>\\\n<para>power</para>\\\n</control>\\\n</common>\\\n</mm>\\\n</harman>';\n\nvar text = 'POST MM HTTP/1.1\\r\\n';\ntext += 'Host: :' + 10025 + '\\r\\n';\ntext += 'User-Agent: Harman Remote Controller/1.0\\r\\n';\ntext += 'Content-Length: ' + body.length + '\\r\\n';\ntext += '\\r\\n';\ntext += body;\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 580,
+        "wires": [
+            [
+                "c4f901b516322dfb"
+            ]
+        ]
+    },
+    {
+        "id": "a47a01a6a3387b6d",
+        "type": "debug",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "c6ab8194ac8aeec7",
+        "type": "switch",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Search",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Back",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "InstantReplay",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Up",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "e4cf165f242e204c"
+            ],
+            [
+                "2c867ad422376a1c"
+            ],
+            [
+                "c07bcb08b1549d82"
+            ],
+            [
+                "89fc5ebafc92bada"
+            ]
+        ]
+    },
+    {
+        "id": "455b603a932d9201",
+        "type": "debug",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 230,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "7608d3145a3a3dbf",
+        "type": "debug",
+        "z": "d667aaabed8b1fc2",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 190,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "156dda5b345103f7",
+        "type": "comment",
+        "z": "d667aaabed8b1fc2",
+        "name": "Power does not work from app",
+        "info": "Power does not work",
+        "x": 560,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "295dde76831e6f57",
+        "type": "dnsquery",
+        "z": "d667aaabed8b1fc2",
+        "name": "JBL-L8",
+        "domain_nameType": "str",
+        "domain_name": "JBL-L8",
+        "record_typeType": "rectype",
+        "record_type": "A",
+        "dns_ip": "",
+        "x": 290,
+        "y": 40,
+        "wires": [
+            [
+                "59e9d402f8cb8399",
+                "7353f7ff4eeb715a"
+            ]
+        ]
+    },
+    {
+        "id": "642bb625542dbcf8",
+        "type": "fakeroku-device",
+        "z": "d667aaabed8b1fc2",
+        "confignode": "da5ca75457e4811a",
+        "x": 80,
+        "y": 480,
+        "wires": [
+            [
+                "455b603a932d9201",
+                "c6ab8194ac8aeec7"
+            ]
+        ]
+    },
+    {
+        "id": "da5ca75457e4811a",
+        "type": "fakeroku-config",
+        "ip": "192.168.1.142",
+        "multicast": "239.255.255.250",
+        "uuid": "71e7c47d6402b98df5df77666cfb0ed4",
+        "port": "8086"
+    }
+]
